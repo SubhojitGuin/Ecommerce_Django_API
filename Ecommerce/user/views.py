@@ -42,9 +42,10 @@ def login(request):
     return Response( {'error':'Missing Credentials'}, status=status.HTTP_400_BAD_REQUEST)
   
 @api_view(['GET'])
-def get_user(request, user_id):
+def get_user(request):
   try:
-    user = User.objects.filter(id = user_id).first()
+    data = request.data
+    user = User.objects.filter(id = data.id).first()
     if user:
       serializer = UserSerializer(user)
       return Response(serializer.data, status=status.HTTP_200_OK)
@@ -54,10 +55,10 @@ def get_user(request, user_id):
     return Response( {'error':'User not found'}, status=status.HTTP_400_BAD_REQUEST)
   
 @api_view(['PUT'])
-def update_user(request, user_id):
+def update_user(request):
   try:
-    user = User.objects.filter(id = user_id).first()
     data = request.data
+    user = User.objects.filter(id = data.id).first()
     if 'password' in data:
         data['password'] = make_password(data['password'])
     if user:       
@@ -72,9 +73,10 @@ def update_user(request, user_id):
     return Response( {'error':'User not found'}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['DELETE'])
-def delete_user(request, user_id):
+def delete_user(request):
   try:
-    user = User.objects.filter(id = user_id).first()
+    data = request.data
+    user = User.objects.filter(id = data.id).first()
     if user:
       user.delete()
       return Response({'info':"User deleted successfully!!!"}, status=status.HTTP_200_OK)
