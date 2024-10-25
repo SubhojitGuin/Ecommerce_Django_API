@@ -42,10 +42,9 @@ def login(request):
     return Response( {'error':'Missing Credentials'}, status=status.HTTP_400_BAD_REQUEST)
   
 @api_view(['GET'])
-def get_user(request):
+def get_user(request, user_id):
   try:
-    data = request.data
-    user = User.objects.filter(id = data.id).first()
+    user = User.objects.filter(id = user_id).first()
     if user:
       serializer = UserSerializer(user)
       return Response(serializer.data, status=status.HTTP_200_OK)
