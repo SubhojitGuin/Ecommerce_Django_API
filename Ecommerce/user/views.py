@@ -83,3 +83,41 @@ def delete_user(request):
       return Response( {'error':'User not found'}, status=status.HTTP_400_BAD_REQUEST)
   except:
     return Response( {'error':'User not found'}, status=status.HTTP_400_BAD_REQUEST)
+  
+@api_view(['POST'])
+def add_to_wishlist(request):
+  try:
+    data = request.data
+    serializer = WishlistSerializer(data=data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response({'info':"Product added to wishlist successfully!!!"}, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+  except:
+    return Response( {'error':'Incorrect Credentials'}, status=status.HTTP_400_BAD_REQUEST)
+  
+@api_view(['POST'])
+def get_wishlist(request):
+  try:
+    data = request.data
+    wishlist = Wishlist.objects.filter(user = data['user_id']).all()
+    if wishlist:
+      serializer = WishlistSerializer(wishlist, many=True)
+      return Response(serializer.data, status=status.HTTP_200_OK)
+    else:
+      return Response( {'error':'Wishlist is empty'}, status=status.HTTP_400_BAD_REQUEST)
+  except:
+    return Response( {'error':'Wishlist is empty'}, status=status.HTTP_400_BAD_REQUEST)
+  
+@api_view(['DELETE'])
+def remove_from_wishlist(request):
+  try:
+    data = request.data
+    wishlist = Wishlist.objects.filter(user = data['user_id'], product = data['product_id']).first()
+    if wishlist:
+      wishlist.delete()
+      return Response({'info':"Product removed from wishlist successfully!!!"}, status=status.HTTP_200_OK)
+    else:
+      return Response( {'error':'Product not found in wishlist'}, status=status.HTTP_400_BAD_REQUEST)
+  except:
+    return Response( {'error':'Product not found in wishlist'}, status=status.HTTP_400_BAD_REQUEST)

@@ -9,3 +9,11 @@ class UserAdmin(admin.ModelAdmin):
     list_per_page = 10
 
 admin.site.register(User, UserAdmin)
+
+class WishlistAdmin(admin.ModelAdmin):
+    list_display = ['user','product','created_at']
+    list_filter = ['created_at']
+    search_fields = ['user', 'product']
+    list_per_page = 10
+    
+admin.site.register(Wishlist, WishlistAdmin)
