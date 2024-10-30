@@ -50,7 +50,7 @@ def product_create(request):
 def product_update(request):
   try:
     data = request.data
-    product = Product.objects.filter(id=data['id']).first()
+    product = Product.objects.get(id=data['id'])
     if product:
         serializer = ProductSerializer(product, data=data, partial=True)
         if serializer.is_valid():
