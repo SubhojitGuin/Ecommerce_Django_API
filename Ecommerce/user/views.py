@@ -1,6 +1,4 @@
 from django.shortcuts import render
-
-# Create your views here.
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
@@ -8,6 +6,7 @@ from .models import *
 from .serializer import *
 from django.contrib.auth.hashers import make_password, check_password
 
+# Create your views here.
 @api_view(['POST'])
 def signup(request):
   try:
@@ -17,7 +16,7 @@ def signup(request):
     email = data['email']
     if serializer.is_valid():
         serializer.save()
-        user = User.objects.filter(email = email).first()
+        user = User.objects.filter(email=email).first()
         if user:
             user_id = user.id
         return Response({'user_id':user_id}, status=status.HTTP_201_CREATED)
@@ -31,7 +30,7 @@ def login(request):
     data = request.data
     email = data['email']
     password = data['password']
-    user = User.objects.filter(email = email).first()
+    user = User.objects.filter(email=email).first()
     if user:
         if check_password(password, user.password):
             return Response({'user_id':user.id}, status=status.HTTP_200_OK)
@@ -44,7 +43,7 @@ def login(request):
 @api_view(['GET'])
 def get_user(request, user_id):
   try:
-    user = User.objects.filter(id = user_id).first()
+    user = User.objects.filter(id=user_id).first()
     if user:
       serializer = UserSerializer(user)
       return Response(serializer.data, status=status.HTTP_200_OK)
@@ -57,7 +56,7 @@ def get_user(request, user_id):
 def update_user(request):
   try:
     data = request.data
-    user = User.objects.filter(id = data.id).first()
+    user = User.objects.get(id=data['id'])
     if 'password' in data:
         data['password'] = make_password(data['password'])
     if user:       
@@ -75,7 +74,7 @@ def update_user(request):
 def delete_user(request):
   try:
     data = request.data
-    user = User.objects.filter(id = data.id).first()
+    user = User.objects.get(id=data['id'])
     if user:
       user.delete()
       return Response({'info':"User deleted successfully!!!"}, status=status.HTTP_200_OK)
@@ -100,7 +99,7 @@ def add_to_wishlist(request):
 def get_wishlist(request):
   try:
     data = request.data
-    wishlist = Wishlist.objects.filter(user = data['user_id']).all()
+    wishlist = Wishlist.objects.filter(user=data['user_id']).all()
     if wishlist:
       serializer = WishlistSerializer(wishlist, many=True)
       return Response(serializer.data, status=status.HTTP_200_OK)
@@ -113,7 +112,8 @@ def get_wishlist(request):
 def remove_from_wishlist(request):
   try:
     data = request.data
-    wishlist = Wishlist.objects.filter(user = data['user_id'], product = data['product_id']).first()
+    # wishlist = Wishlist.objects.filter(user = data['user_id'], product = data['product_id']).first()
+    wishlist = Wishlist.objects.get(user=data['user_id'], product=data['product_id'])
     if wishlist:
       wishlist.delete()
       return Response({'info':"Product removed from wishlist successfully!!!"}, status=status.HTTP_200_OK)
