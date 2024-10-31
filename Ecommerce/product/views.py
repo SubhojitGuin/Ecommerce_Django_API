@@ -19,13 +19,10 @@ def product_list(request):
           prod['available'] = 'Out_of_stock'
     return Response(prod_dict)
 
-@api_view(['POST'])
-def product_detail(request):
+@api_view(['GET'])
+def product_detail(request, product_id):
   try:
-    data = request.data
-    print(data)
-    product = Product.objects.get(id=data['id'])
-    print(product)
+    product = Product.objects.get(id=product_id)
     if product:
         quantity = product.quantity
         if quantity == 0:
