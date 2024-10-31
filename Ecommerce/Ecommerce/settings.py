@@ -75,6 +75,13 @@ MIDDLEWARE = [
 
 CORS_ALLOW_ALL_ORIGINS = True
 
+CORS_ALLOW_HEADERS = [
+    'Content-Type',
+    'Authorization',
+    'ngrok-skip-browser-warning',  # Add this header
+]
+
+
 ROOT_URLCONF = 'Ecommerce.urls'
 
 TEMPLATES = [

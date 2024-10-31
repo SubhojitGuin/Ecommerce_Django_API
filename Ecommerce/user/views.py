@@ -3,6 +3,8 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from .models import *
+from product.models import *
+from product.serializer import *
 from .serializer import *
 from django.contrib.auth.hashers import make_password, check_password
 
@@ -102,7 +104,19 @@ def get_wishlist(request):
     wishlist = Wishlist.objects.filter(user=data['user_id']).all()
     if wishlist:
       serializer = WishlistSerializer(wishlist, many=True)
-      return Response(serializer.data, status=status.HTTP_200_OK)
+      wishdict = serializer.data
+      for wish in wishdict:
+        product = Product.objects.filter(id=wish['product']).first()
+        wish['product']  = ProductSerializer(product).data
+        # i['product'] = product.name
+        # i['description'] = product.description
+        # i['price'] = product.price
+        # i['brand'] = product.brand 
+        if product.quantity > 0:
+          wish['product']['available'] = 'In_stock'
+        else:
+          wish['product']['available'] = 'Out_of_stock'
+      return Response(wishdict, status=status.HTTP_200_OK)
     else:
       return Response( {'error':'Wishlist is empty'}, status=status.HTTP_400_BAD_REQUEST)
   except:

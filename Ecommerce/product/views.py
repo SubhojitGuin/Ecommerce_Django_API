@@ -11,7 +11,13 @@ from .serializer import *
 def product_list(request):
     products = Product.objects.all()
     serializer = ProductSerializer(products, many=True)
-    return Response(serializer.data)
+    prod_dict = serializer.data
+    for prod in prod_dict:
+       if prod['quantity'] > 0:
+          prod['available'] = 'In_stock'
+       else:
+          prod['available'] = 'Out_of_stock'
+    return Response(prod_dict)
 
 @api_view(['POST'])
 def product_detail(request):
