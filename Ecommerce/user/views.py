@@ -85,23 +85,25 @@ def delete_user(request):
   except:
     return Response( {'error':'User not found'}, status=status.HTTP_400_BAD_REQUEST)
   
-@api_view(['POST'])
-def add_to_wishlist(request):
+@api_view(['GET'])
+def add_to_wishlist(request,user_id ,product_id):
   try:
-    data = request.data
+    data = {
+      'user': user_id,
+      'product': product_id
+    }
     serializer = WishlistSerializer(data=data)
     if serializer.is_valid():
         serializer.save()
         return Response({'info':"Product added to wishlist successfully!!!"}, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    return Response({'error':'Incorrect Credentials'}, status=status.HTTP_400_BAD_REQUEST)
   except:
     return Response( {'error':'Incorrect Credentials'}, status=status.HTTP_400_BAD_REQUEST)
   
-@api_view(['POST'])
-def get_wishlist(request):
+@api_view(['GET'])
+def get_wishlist(request , user_id):
   try:
-    data = request.data
-    wishlist = Wishlist.objects.filter(user=data['user_id']).all()
+    wishlist = Wishlist.objects.filter(user=user_id).all()
     if wishlist:
       serializer = WishlistSerializer(wishlist, many=True)
       wishdict = serializer.data
@@ -123,11 +125,10 @@ def get_wishlist(request):
     return Response( {'error':'Wishlist is empty'}, status=status.HTTP_400_BAD_REQUEST)
   
 @api_view(['DELETE'])
-def remove_from_wishlist(request):
-  try:
-    data = request.data
+def remove_from_wishlist(request,user_id, product_id):
+  try:  
     # wishlist = Wishlist.objects.filter(user = data['user_id'], product = data['product_id']).first()
-    wishlist = Wishlist.objects.get(user=data['user_id'], product=data['product_id'])
+    wishlist = Wishlist.objects.get(user=user_id, product=product_id)
     if wishlist:
       wishlist.delete()
       return Response({'info':"Product removed from wishlist successfully!!!"}, status=status.HTTP_200_OK)
