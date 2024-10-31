@@ -4,19 +4,30 @@ from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
+from user.models import *
 from .models import *
 from .serializer import *
 
 @api_view(['GET'])
-def product_list(request):
+def product_list(request , user_id):
+    wishlist = Wishlist.objects.filter(user=user_id).all()
+    wishlist_ids = []
+    if wishlist:
+      for wish in wishlist:
+          wishlist_ids.append(wish.product.id) 
     products = Product.objects.all()
     serializer = ProductSerializer(products, many=True)
     prod_dict = serializer.data
     for prod in prod_dict:
-       if prod['quantity'] > 0:
-          prod['available'] = 'In_stock'
-       else:
-          prod['available'] = 'Out_of_stock'
+      if prod['quantity'] > 0:
+          prod['available'] = 'In stock'
+      else:
+          prod['available'] = 'Out of stock'
+      
+      if prod['id'] in wishlist_ids:
+            prod['wishlist'] = True
+      else:
+         prod['wishlist'] = False   
     return Response(prod_dict)
 
 @api_view(['GET'])
