@@ -58,6 +58,7 @@ def get_user(request, user_id):
 def update_user(request):
   try:
     data = request.data
+    data = {k: v for k, v in data.items() if v}
     user = User.objects.get(id=data['id'])
     if 'password' in data:
         data['password'] = make_password(data['password'])
