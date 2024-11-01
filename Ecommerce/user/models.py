@@ -29,3 +29,13 @@ class Wishlist(models.Model):
     
     def __str__(self):
         return self.user.first_name
+    
+
+class Cart(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    cart = models.JSONField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return self.user.first_name

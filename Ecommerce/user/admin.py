@@ -30,3 +30,17 @@ class WishlistAdmin(admin.ModelAdmin):
     get_product_id.short_description = 'product_id' 
     
 admin.site.register(Wishlist, WishlistAdmin)
+
+class CartAdmin(admin.ModelAdmin):
+    readonly_fields = ['created_at']
+    list_display = ['user','cart','get_user_id']
+    list_filter = ['created_at', 'updated_at']
+    search_fields = ['user']
+    list_per_page = 10
+
+    def get_user_id(self, obj):
+        return obj.user.id
+    get_user_id.short_description = 'user_id'  
+
+admin.site.register(Cart, CartAdmin)
+

@@ -137,3 +137,98 @@ def remove_from_wishlist(request,user_id, product_id):
       return Response( {'error':'Product not found in wishlist'}, status=status.HTTP_400_BAD_REQUEST)
   except:
     return Response( {'error':'Product not found in wishlist'}, status=status.HTTP_400_BAD_REQUEST)
+  
+@api_view(['POST'])
+def add_to_cart(request):
+  try:
+    data = request.data
+    user_id = data['user_id']
+    product_id = data['product_id']
+    cart_obj = Cart.objects.filter(user=user_id).first()
+    if not cart_obj:
+      cart = {}
+    else:
+      cart = cart_obj.cart
+    cart[product_id] = 1
+    dict = {
+      "user": user_id,
+      "cart": cart
+    }
+    serializer = CartSerializer(cart_obj, data=dict, partial = True)
+    if serializer.is_valid():
+      serializer.save()
+      return Response({"info": "Added to cart"}, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+  except:
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def get_cart(request, user_id):
+  try:
+    cart_obj = Cart.objects.get(user=user_id)
+    if cart_obj:
+      cart = cart_obj.cart
+      cart_dict = {}
+      cart_dict["viewCart"] = True
+      for key, value in cart.items():
+        product = Product.objects.filter(id=key).first()
+        cart_dict[key] = ProductSerializer(product).data
+        cart_dict[key]['cart_quantity'] = value
+      return Response(cart_dict, status=status.HTTP_200_OK)
+    else:
+      return Response({'viewCart': False}, status=status.HTTP_400_BAD_REQUEST)
+  except:
+    return Response({'error': 'Cart is empty'}, status=status.HTTP_400_BAD_REQUEST)
+
+# @api_view(['DELETE'])
+# def remove_from_cart(request, user_id, product_id):
+#   try:
+#     cart_obj = Cart.objects.get(user=user_id)
+#     if cart_obj:
+#       cart = cart_obj.cart
+#       if product_id in cart:
+#         del cart[product_id]
+#         cart_obj.cart = cart
+#         cart_obj.save()
+#         return Response({'info': 'Product deleted from cart'}, status=status.HTTP_200_OK)
+#       else:
+#         return Response({'error': 'Product not found in cart'}, status=status.HTTP_400_BAD_REQUEST)
+#     else:
+#       return Response({'error': 'Cart is empty'}, status=status.HTTP_400_BAD_REQUEST)
+#   except:
+#     return Response({'error': 'Cart is empty'}, status=status.HTTP_400_BAD_REQUEST)
+  
+@api_view(['DELETE'])
+def clear_cart(request, user_id):
+  try:
+    cart_obj = Cart.objects.get(user=user_id)
+    if cart_obj:
+      cart_obj.delete()
+      return Response({'info': 'Cart cleared successfully'}, status=status.HTTP_200_OK)
+    else:
+      return Response({'error': 'Cart is empty'}, status=status.HTTP_400_BAD_REQUEST)
+  except:
+    return Response({'error': 'Cart is empty'}, status=status.HTTP_400_BAD_REQUEST)
+  
+@api_view(['POST'])
+def update_cart(request, user_id):
+  try:
+    data = request.data
+    cart_dict = data['cart']
+    cart_obj = Cart.objects.get(user=user_id)
+    if cart_obj:
+      cart_dict = {k: v for k, v in cart_dict.items() if v}
+      data = {
+        'user': user_id,
+        'cart': cart_dict
+      }
+      serializer = CartSerializer(cart_obj, data=data, partial=True)
+      if serializer.is_valid():
+        serializer.save()
+        return Response({'info': 'Cart updated successfully'}, status=status.HTTP_200_OK)
+    else:
+      return Response({'error': 'Cart is empty'}, status=status.HTTP_400_BAD_REQUEST)
+  except:
+    return Response({'error': 'Cart is empty'}, status=status.HTTP_400_BAD_REQUEST)
+
+  
