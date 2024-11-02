@@ -216,16 +216,21 @@ def update_cart(request, user_id):
     data = request.data
     cart_dict = data['cart']
     cart_obj = Cart.objects.get(user=user_id)
+    total_price = 0
     if cart_obj:
-      cart_dict = {k: v for k, v in cart_dict.items() if v}
+      cart_dict = {k: v for k, v in cart_dict.items() if v}    
+      for product, quantity in cart_dict.items():
+        product_obj = Product.objects.get(id=product)
+        total_price += product_obj.price * quantity
       data = {
         'user': user_id,
-        'cart': cart_dict
+        'cart': cart_dict,
+        'total_price': total_price
       }
       serializer = CartSerializer(cart_obj, data=data, partial=True)
       if serializer.is_valid():
         serializer.save()
-        return Response({'info': 'Cart updated successfully'}, status=status.HTTP_200_OK)
+        return Response({'info': 'Cart updated successfully', 'total_price': total_price}, status=status.HTTP_200_OK)
     else:
       return Response({'error': 'Cart is empty'}, status=status.HTTP_400_BAD_REQUEST)
   except:

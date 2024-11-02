@@ -33,7 +33,7 @@ admin.site.register(Wishlist, WishlistAdmin)
 
 class CartAdmin(admin.ModelAdmin):
     readonly_fields = ['created_at']
-    list_display = ['user','cart','get_user_id']
+    list_display = ['user','cart','get_user_id','total_price']
     list_filter = ['created_at', 'updated_at']
     search_fields = ['user']
     list_per_page = 10
