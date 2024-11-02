@@ -19,7 +19,6 @@ class WishlistAdmin(admin.ModelAdmin):
     list_filter = ['created_at']
     search_fields = ['user', 'product']
     list_per_page = 10
-
     
     def get_user_id(self, obj):
         return obj.user.id
