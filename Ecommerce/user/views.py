@@ -144,15 +144,20 @@ def add_to_cart(request):
     data = request.data
     user_id = data['user_id']
     product_id = data['product_id']
+    total_price = 0
     cart_obj = Cart.objects.filter(user=user_id).first()
     if not cart_obj:
       cart = {}
     else:
       cart = cart_obj.cart
     cart[product_id] = 1
+    for product, quantity in cart.items():
+      product_obj = Product.objects.get(id=product)
+      total_price += product_obj.price * quantity
     dict = {
       "user": user_id,
-      "cart": cart
+      "cart": cart,
+      "total_price": total_price
     }
     serializer = CartSerializer(cart_obj, data=dict, partial = True)
     if serializer.is_valid():
