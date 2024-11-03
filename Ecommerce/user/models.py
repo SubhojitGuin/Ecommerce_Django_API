@@ -1,4 +1,6 @@
 from django.db import models
+from product.models import *
+from decimal import Decimal
 from django.core.validators import MinValueValidator
 
 # Create your models here.
@@ -39,6 +41,17 @@ class Cart(models.Model):
                                       validators=[MinValueValidator(0)])
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def save(self, *args, **kwargs):
+        total = 0
+        for product_id, quantity in self.cart.items():
+            try:
+                product = Product.objects.get(id=product_id)
+                total += product.price * quantity
+            except Product.DoesNotExist:
+                continue
+        self.total_price = total
+        super().save(*args, **kwargs)
     
     def __str__(self):
         return self.user.first_name

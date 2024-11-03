@@ -144,20 +144,20 @@ def add_to_cart(request):
     data = request.data
     user_id = data['user_id']
     product_id = data['product_id']
-    total_price = 0
+    # total_price = 0
     cart_obj = Cart.objects.filter(user=user_id).first()
     if not cart_obj:
       cart = {}
     else:
       cart = cart_obj.cart
     cart[product_id] = 1
-    for product, quantity in cart.items():
-      product_obj = Product.objects.get(id=product)
-      total_price += product_obj.price * quantity
+    # for product, quantity in cart.items():
+    #   product_obj = Product.objects.get(id=product)
+    #   total_price += product_obj.price * quantity
     dict = {
       "user": user_id,
-      "cart": cart,
-      "total_price": total_price
+      "cart": cart
+      # "total_price": total_price
     }
     serializer = CartSerializer(cart_obj, data=dict, partial = True)
     if serializer.is_valid():
@@ -224,18 +224,19 @@ def update_cart(request, user_id):
     total_price = 0
     if cart_obj:
       cart_dict = {k: v for k, v in cart_dict.items() if v}    
-      for product, quantity in cart_dict.items():
-        product_obj = Product.objects.get(id=product)
-        total_price += product_obj.price * quantity
+      # for product, quantity in cart_dict.items():
+      #   product_obj = Product.objects.get(id=product)
+      #   total_price += product_obj.price * quantity
       data = {
         'user': user_id,
-        'cart': cart_dict,
-        'total_price': total_price
+        'cart': cart_dict
+        # 'total_price': total_price
       }
       serializer = CartSerializer(cart_obj, data=data, partial=True)
       if serializer.is_valid():
         serializer.save()
-        return Response({'info': 'Cart updated successfully', 'total_price': total_price}, status=status.HTTP_200_OK)
+        cart_obj = Cart.objects.get(user=user_id)
+        return Response({'info': 'Cart updated successfully', 'total_price': cart_obj.total_price}, status=status.HTTP_200_OK)
     else:
       return Response({'error': 'Cart is empty'}, status=status.HTTP_400_BAD_REQUEST)
   except:
