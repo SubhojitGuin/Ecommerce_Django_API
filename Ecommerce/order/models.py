@@ -44,3 +44,5 @@ class OrderItem(models.Model):
     def __str__(self):
         return f"{self.quantity} x {self.product.name} (Order {self.order.id})"
     
+    class Meta:
+        unique_together = ('order', 'product')
