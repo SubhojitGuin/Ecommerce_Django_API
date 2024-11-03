@@ -18,7 +18,7 @@ class Order(models.Model):
     ]
     
     user = models.ForeignKey(User, related_name='orders', on_delete=models.CASCADE)
-    address = models.TextField()
+    address = models.TextField(blank=True, null=True)
     order_status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     tracking_status = models.TextField(blank=True, null=True)
     payment_status = models.BooleanField(default=False)
@@ -28,7 +28,7 @@ class Order(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     
     def __str__(self):
-        return f"Order {self.id} - {self.customer_name}"
+        return f"Order {self.id} - {self.user.first_name}"
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, related_name='order_items', on_delete=models.CASCADE)
@@ -36,9 +36,6 @@ class OrderItem(models.Model):
     quantity = models.PositiveIntegerField()
     total_price = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(0.00)])
     
-    # @property
-    # def total_price(self):
-    #     return self.product.price * self.quantity
 
     def save(self, *args, **kwargs):
         self.total_price = self.product.price * self.quantity

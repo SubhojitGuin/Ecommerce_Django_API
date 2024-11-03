@@ -22,5 +22,5 @@ class OrderAdmin(admin.ModelAdmin):
         return obj.total_price
     total_order_price.short_description = "Total Order Price"
 
-admin.site.register(Product)
+
 admin.site.register(Order, OrderAdmin)
