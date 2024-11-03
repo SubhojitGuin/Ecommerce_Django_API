@@ -12,7 +12,7 @@ from .serializer import *
 @api_view(['POST'])
 def create_order(request, user_id):
   try:
-    payment_method = request.data['payment_method']
+    payment_method = request.data['payment_method'] if "payment_method" in request.data else "cod"
     cart = get_object_or_404(Cart, user=user_id)
     address = request.data['address'] if "address" in request.data else cart.user.address 
     cart_dict = cart.cart
