@@ -17,10 +17,13 @@ def create_order(request, user_id):
     address = request.data['address'] if "address" in request.data else cart.user.address 
     cart_dict = cart.cart
 
+    out_of_stock = []
     for item, quantity in cart_dict.items():
       product = Product.objects.get(id=int(item))
       if product.quantity < quantity:
-        return Response({'error':'Product out of stock'}, status=status.HTTP_400_BAD_REQUEST)
+        out_of_stock.append({"id": product.id , "name" : product.name})      
+    if out_of_stock:
+        return Response({"out_of_stock" : out_of_stock}, status=status.HTTP_400_BAD_REQUEST)
 
     order = Order.objects.create(user=cart.user, address=address, total_price=cart.total_price, payment_method=payment_method)
     order.save()
