@@ -15,4 +15,25 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
+RATING_CHOICES = (
+    (1, '1'),
+    (2, '2'),
+    (3, '3'),
+    (4, '4'),
+    (5, '5'),
+)
 
+class Review(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    user = models.ForeignKey('user.User', on_delete=models.CASCADE)
+    rating = models.PositiveIntegerField(choices=RATING_CHOICES, null=True, blank=True)
+    review = models.TextField(null=True, blank=True)
+    verified_purchase = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ('product', 'user')
+
+    def __str__(self):
+        return self.user.first_name

@@ -30,6 +30,9 @@ class Order(models.Model):
     def __str__(self):
         return f"Order {self.id} - {self.user.first_name}"
 
+    def get_products(self):
+        return OrderItem.objects.filter(order=self).all()
+
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, related_name='order_items', on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)

@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from user.models import *
 from .models import *
+from order.models import *
 from .serializer import *
 
 # Create your views here.
@@ -139,5 +140,60 @@ def product_price(request):
   except:
     return Response( {'error':'Incorrect Data'}, status=status.HTTP_400_BAD_REQUEST)
   
-
+@api_view(['POST'])
+def add_review(request):
+  try:
+    data = request.data
+    user_id = data['user']
+    product_id = data['product']
+    order_obj_list = Order.objects.filter(user=user_id, payment_status=True).all()
+    for item in order_obj_list:
+      order_id = item.id
+      orderitem_obj = OrderItem.objects.filter(order_id=order_id, product_id=product_id).first()
+      if orderitem_obj:
+        data['verified_purchase'] = True
+      
+    serializer = ReviewSerializer(data=data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response({'info':"Review added successfully!!!"}, status=status.HTTP_201_CREATED)
+    return Response({'error':'Incorrect Credentials'}, status=status.HTTP_400_BAD_REQUEST)
+  except:
+    return Response( {'error':'Incorrect Credentials'}, status=status.HTTP_400_BAD_REQUEST)
   
+
+@api_view(['GET'])
+def get_reviews(request, product_id):
+  try:
+    reviews = Review.objects.filter(product_id=product_id).all()
+    serializer = ReviewSerializer(reviews, many=True)
+    return Response(serializer.data)
+  except:
+    return Response( {'error':'No Reviews found'}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['PUT'])
+def update_review(request, user_id, product_id):
+  try:
+    data = request.data
+    review = Review.objects.get(user_id=user_id, product_id=product_id)
+    if review:
+        serializer = ReviewSerializer(review, data=data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+        return Response({'message':'Review Updated'}, status=status.HTTP_200_OK)
+    else:
+      return Response( {'error':'Review not found'}, status=status.HTTP_400_BAD_REQUEST)
+  except:
+    return Response( {'error':'Missing data'}, status=status.HTTP_400_BAD_REQUEST)
+  
+@api_view(['DELETE'])
+def delete_review(request, user_id, product_id):
+  try:
+    review = Review.objects.get(user_id=user_id, product_id=product_id)
+    if review:
+      review.delete()
+      return Response( {'message':'Review Deleted'})
+    else:
+      return Response( {'error':'Review not found'}, status=status.HTTP_400_BAD_REQUEST)
+  except:
+    return Response( {'error':'Missing data'}, status=status.HTTP_400_BAD_REQUEST)

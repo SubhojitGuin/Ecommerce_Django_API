@@ -8,6 +8,7 @@ from rest_framework import status
 from order.models import Order
 from user.models import Cart
 from .models import Payment
+from product.models import *
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
@@ -120,6 +121,17 @@ def stripe_payment(request, order_id):
             order.save()
             user_id = order.user.id
             cart = Cart.objects.get(user=user_id)
+            cart_items = cart.cart
+            
+            for product_id, quantity in cart_items.item():
+                review_obj = Review.objects.filter(product_id=product_id, user_id=user_id).first()
+                if review_obj:
+                    review_obj.verified_purchase = True
+                    review_obj.save()
+                product_obj = Product.objects.get(id=product_id).first()
+                product_obj.quantity -= quantity
+                product_obj.save()
+
             cart.delete()
             # payments_obj = Payments.objects.get(order=order)
             payments_obj.payment_status = 'success'
