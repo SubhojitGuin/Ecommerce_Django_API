@@ -11,6 +11,7 @@ urlpatterns = [
     path('filterby_category/', views.product_category, name='product_category'),
     path('filterby_brand/', views.product_brand, name='product_brand'),
     path('filterby_price/', views.product_price, name='product_price'),
+    path('filterby_rating/<int:product_id>/<int:rating>/', views.product_rating ,name='product_rating'),
     path('add_review/', views.add_review, name='add_review'),
     path('get_review/<int:product_id>/', views.get_reviews, name='get_review'),
     path('update_review/<int:user_id>/<int:product_id>/', views.update_review, name='update_review'),

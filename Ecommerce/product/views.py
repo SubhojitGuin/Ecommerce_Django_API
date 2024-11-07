@@ -140,6 +140,19 @@ def product_price(request):
   except:
     return Response( {'error':'Incorrect Data'}, status=status.HTTP_400_BAD_REQUEST)
   
+@api_view(['GET'])
+def product_rating(request , product_id , rating):
+   try:
+      review_objs = Review.objects.filter(product_id=product_id, rating=rating).all()
+      if review_objs:
+         serializer = ModifiedReviewSerializer(review_objs, many=True)
+         return Response(serializer.data)         
+      else:
+         return Response({"error" : "No reviews found"}, status=status.HTTP_400_BAD_REQUEST)
+   except:
+        return Response({"error" : "Missing Required Data"}, status=status.HTTP_400_BAD_REQUEST)
+      
+  
 @api_view(['POST'])
 def add_review(request):
   try:
@@ -166,7 +179,7 @@ def add_review(request):
 def get_reviews(request, product_id):
   try:
     reviews = Review.objects.filter(product_id=product_id).all()
-    serializer = ReviewSerializer(reviews, many=True)
+    serializer = ModifiedReviewSerializer(reviews, many=True)
     return Response(serializer.data)
   except:
     return Response( {'error':'No Reviews found'}, status=status.HTTP_400_BAD_REQUEST)

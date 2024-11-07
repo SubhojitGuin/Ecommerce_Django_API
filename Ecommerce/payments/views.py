@@ -123,12 +123,12 @@ def stripe_payment(request, order_id):
             cart = Cart.objects.get(user=user_id)
             cart_items = cart.cart
             
-            for product_id, quantity in cart_items.item():
+            for product_id, quantity in cart_items.items():
                 review_obj = Review.objects.filter(product_id=product_id, user_id=user_id).first()
                 if review_obj:
                     review_obj.verified_purchase = True
                     review_obj.save()
-                product_obj = Product.objects.get(id=product_id).first()
+                product_obj = Product.objects.get(id=product_id)
                 product_obj.quantity -= quantity
                 product_obj.save()
 
@@ -140,7 +140,7 @@ def stripe_payment(request, order_id):
             print("Payment successful/n", payment_intent)
 
             return Response({
-                    'message': "Card Payment Success",
+                    'success': "Card Payment Success",
                     # "card_details": card_details,
                     # "payment_intent": payment_intent,
                     # "payment_confirm": payment_confirm
@@ -152,7 +152,7 @@ def stripe_payment(request, order_id):
             print("Payment unsuccessful/n", payment_intent)
 
             return Response({
-                    'message': "Card Payment Failed",
+                    'error': "Card Payment Failed",
                     # "card_details": card_details,
                     # "payment_intent": payment_intent_modified,
                     # "payment_confirm": payment_confirm
