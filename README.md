@@ -9,6 +9,7 @@ This is an E-Commerce API built with Django and Django REST framework. It provid
 - [Usage](#usage)
 - [API Endpoints](#api-endpoints)
 - [License](#license)
+- [Contributors](#contributors)
 
 ## Features
 
