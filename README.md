@@ -64,7 +64,7 @@ This is an E-Commerce API built with Django and Django REST framework. It provid
     Now add your credentials and save it.
 
 7. **Create the .env file**
-    Create a *.env* file in Ecommerce\Ecommerce folder an copy the format from [.env.sample](Ecommerce\Ecommerce\\.env.sample) i.e.:
+    Create a *.env* file in Ecommerce\Ecommerce folder an copy the format from [.env.sample](https://github.com/SubhojitGuin/Ecommerce_Django_API/blob/main/Ecommerce/Ecommerce/.env.sample) i.e.:
 
     ```sh
     STRIPE_SECRET_KEY=your_stripe_secret_key
@@ -84,27 +84,27 @@ This is an E-Commerce API built with Django and Django REST framework. It provid
 ### Access the Admin Panel
 Access the admin panel at `http://localhost:8000/admin/` using the superuser credentials.
 
-![admin page](images\admin.png)
+![admin page](https://github.com/SubhojitGuin/Ecommerce_Django_API/blob/main/images/admin.png?raw=true)
 
 ### Access the API Documentation
 - Swagger UI: `http://localhost:8000/swagger/`
 - ReDoc: `http://localhost:8000/redoc/`
 
-![api documentation](images\Ecommerce.png)
+![api documentation](https://github.com/SubhojitGuin/Ecommerce_Django_API/blob/main/images/Ecommerce.png?raw=true)
 
 ## API Endpoints
 
 ### Order API
-![order api](images\order.png)
+![order api](https://github.com/SubhojitGuin/Ecommerce_Django_API/blob/main/images/order.png?raw=true)
 
 ### Payment API
-![payment api](images\payment.png)
+![payment api](https://github.com/SubhojitGuin/Ecommerce_Django_API/blob/main/images/payment.png?raw=true)
 
 ### Product API
-![product api](images\product.png)
+![product api](https://github.com/SubhojitGuin/Ecommerce_Django_API/blob/main/images/product.png?raw=true)
 
 ### User API
-![user api](images\user.png)
+![user api](https://github.com/SubhojitGuin/Ecommerce_Django_API/blob/main/images/user.png?raw=true)
 
 ## License
 This project is licensed under the MIT License. See the [🎗️LICENSE](LICENSE) file for details.
