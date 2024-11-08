@@ -5,7 +5,7 @@ from .models import *
 
 class ReviewInlineAdmin(admin.TabularInline):
     model = Review
-    readonly_fields = ['rating', 'created_at', 'updated_at']
+    readonly_fields = ['created_at', 'updated_at']
     fields = ['user','product','rating','review','verified_purchase']
     extra = 0
     
