@@ -31,6 +31,8 @@ def create_order(request, user_id):
     for item, quantity in cart_dict.items():
       order_item = OrderItem.objects.create(order=order, product_id=int(item), quantity=quantity)
       order_item.save()
+    if payment_method == "cod":
+      cart.delete()
 
     return Response({"id" : order.id, "total_price": order.total_price}, status=status.HTTP_200_OK)
   except:

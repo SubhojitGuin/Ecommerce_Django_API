@@ -6,6 +6,7 @@ from user.models import *
 from .models import *
 from order.models import *
 from .serializer import *
+from django.db.models import Avg
 
 # Create your views here.
 @api_view(['GET'])
@@ -27,7 +28,11 @@ def product_list(request , user_id):
       if prod['id'] in wishlist_ids:
             prod['wishlist'] = True
       else:
-         prod['wishlist'] = False   
+         prod['wishlist'] = False
+      rating = Review.objects.filter(product_id=prod['id']).aggregate(Avg('rating'))['rating__avg']
+      prod['average_rating'] = rating if rating else 0
+      prod['reviews'] = Review.objects.filter(product_id=prod['id']).count()
+        
     return Response(prod_dict)
 
 @api_view(['GET'])
@@ -43,6 +48,9 @@ def product_detail(request, product_id):
         serializer = ProductSerializer(product, many=False)
         data = serializer.data
         data['available'] = available
+        rating = Review.objects.filter(product_id=product_id).aggregate(Avg('rating'))['rating__avg']
+        data['average_rating'] = rating if rating else 0
+        data['reviews'] = Review.objects.filter(product_id=product_id).count()
         return Response(data)
     else:
         return Response({'error':'Product not found'}, status=status.HTTP_400_BAD_REQUEST)
