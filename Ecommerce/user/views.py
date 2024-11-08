@@ -47,7 +47,7 @@ def get_user(request, user_id):
   try:
     user = User.objects.filter(id=user_id).first()
     if user:
-      serializer = UserSerializer(user)
+      serializer = UserModifiedSerializer(user)
       return Response(serializer.data, status=status.HTTP_200_OK)
     else:
       return Response( {'error':'User not found'}, status=status.HTTP_400_BAD_REQUEST)

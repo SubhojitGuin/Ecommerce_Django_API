@@ -7,6 +7,11 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = '__all__'
 
+class UserModifiedSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'email', 'phone', 'address', 'city', 'state', 'country', 'pin_code', 'date_of_birth']
+
 class WishlistSerializer(serializers.ModelSerializer):
     class Meta:
         model = Wishlist
