@@ -12,8 +12,11 @@ This is an E-Commerce API built with Django and Django REST framework. It provid
 
 ## Features
 
-- User management (registration, login, etc.)
-- Product management (CRUD operations)
+- User management (registration, login, wishlist, cart, etc.)
+- Product management (CRUD operations - product details, reviews)
+- Order management (CRUD operations)
+- Payment gateway integration (Stripe)
+- Authentication and Authorization (using Django's built-in auth system)
 - API documentation with Swagger UI and ReDoc
 
 ## Installation
@@ -31,36 +34,77 @@ This is an E-Commerce API built with Django and Django REST framework. It provid
    ```sh
    git clone https://github.com/SubhojitGuin/Ecommerce_Django_API.git
    cd Ecommerce_Django_API
+   ```
 
 2. **Create a virtual environment**
     ```sh
     python -m venv .venv
-    source .venv/bin/activate
+    .\.venv\Scripts\activate
+    ```
 
 3. **Install Dependencies**
     ```sh
     pip install -r requirements.txt
+    ```
+
+4. **Change the directory**
+    ```sh
+    cd Ecommerce
+    ```
 
 4. **Apply migrations:**
     ```sh
     python manage.py migrate
+    ```
   
-5. **Create a superuser:**
+6. **Create a superuser:**
     ```sh
     python manage.py createsuperuser
+    ```
+    Now add your credentials and save it.
 
-6. **Run the development server:**
+7. **Create the .env file**
+    Create a *.env* file in Ecommerce\Ecommerce folder an copy the format from [.env.sample](https://github.com/SubhojitGuin/Ecommerce_Django_API/blob/main/Ecommerce/Ecommerce/.env.sample) i.e.:
+
+    ```sh
+    STRIPE_SECRET_KEY=your_stripe_secret_key
+    STRIPE_PUBLISHABLE_KEY=your_stripe_publishable_key
+    TAX=tax_rate
+    ```
+
+    To get your stripe keys, click [here](https://dashboard.stripe.com/test/dashboard).
+
+8. **Run the development server:**
     ```sh
     python manage.py runserver
+    ```
 
-### Usage
+## Usage
 
-#### Access the Admin Panel
-Access the admin panel at `http://localhost:8000/admin/` using the superuser credentials
+### Access the Admin Panel
+Access the admin panel at `http://localhost:8000/admin/` using the superuser credentials.
 
-#### Access the API Documentation
+![admin page](https://github.com/SubhojitGuin/Ecommerce_Django_API/blob/main/images/admin.png?raw=true)
+
+### Access the API Documentation
 - Swagger UI: `http://localhost:8000/swagger/`
 - ReDoc: `http://localhost:8000/redoc/`
 
-### License
-This project is licensed under the MIT License. See the [📃LICENSE](LICENSE) file for details.
+![api documentation](https://github.com/SubhojitGuin/Ecommerce_Django_API/blob/main/images/Ecommerce.png?raw=true)
+
+## API Endpoints
+
+### Order API
+![order api](https://github.com/SubhojitGuin/Ecommerce_Django_API/blob/main/images/order.png?raw=true)
+
+### Payment API
+![payment api](https://github.com/SubhojitGuin/Ecommerce_Django_API/blob/main/images/payment.png?raw=true)
+
+### Product API
+![product api](https://github.com/SubhojitGuin/Ecommerce_Django_API/blob/main/images/product.png?raw=true)
+
+### User API
+![user api](https://github.com/SubhojitGuin/Ecommerce_Django_API/blob/main/images/user.png?raw=true)
+
+## License
+This project is licensed under the MIT License. See the [🎗️LICENSE](LICENSE) file for details.
