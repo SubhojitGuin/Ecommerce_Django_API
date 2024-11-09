@@ -156,11 +156,11 @@ def stripe_payment(request, order_id):
                     # "card_details": card_details,
                     # "payment_intent": payment_intent_modified,
                     # "payment_confirm": payment_confirm
-                }, status=status.HTTP_400_BAD_REQUEST)
+                }, status=status.HTTP_200_OK)
     else:
 
         print("Order not found")
-        return Response({"error": "Order not found"}, status=status.HTTP_404_NOT_FOUND)
+        return Response({"error": "Order not found"}, status=status.HTTP_200_OK)
   except Exception as e:
     print("Exception: ", e)
     return Response({

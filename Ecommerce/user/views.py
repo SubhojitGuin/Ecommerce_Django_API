@@ -50,7 +50,7 @@ def get_user(request, user_id):
       serializer = UserModifiedSerializer(user)
       return Response(serializer.data, status=status.HTTP_200_OK)
     else:
-      return Response( {'error':'User not found'}, status=status.HTTP_400_BAD_REQUEST)
+      return Response( {'error':'User not found'}, status=status.HTTP_200_OK)
   except:
     return Response( {'error':'User not found'}, status=status.HTTP_400_BAD_REQUEST)
   
@@ -69,7 +69,7 @@ def update_user(request):
             return Response({'info':"Profile updated successfully!!!"}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     else:
-        return Response( {'error':'User not found'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response( {'error':'User not found'}, status=status.HTTP_200_OK)
   except:
     return Response( {'error':'User not found'}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -82,7 +82,7 @@ def delete_user(request):
       user.delete()
       return Response({'info':"User deleted successfully!!!"}, status=status.HTTP_200_OK)
     else:
-      return Response( {'error':'User not found'}, status=status.HTTP_400_BAD_REQUEST)
+      return Response( {'error':'User not found'}, status=status.HTTP_200_OK)
   except:
     return Response( {'error':'User not found'}, status=status.HTTP_400_BAD_REQUEST)
   
@@ -134,7 +134,7 @@ def remove_from_wishlist(request,user_id, product_id):
       wishlist.delete()
       return Response({'info':"Product removed from wishlist successfully!!!"}, status=status.HTTP_200_OK)
     else:
-      return Response( {'error':'Product not found in wishlist'}, status=status.HTTP_400_BAD_REQUEST)
+      return Response( {'error':'Product not found in wishlist'}, status=status.HTTP_200_OK)
   except:
     return Response( {'error':'Product not found in wishlist'}, status=status.HTTP_400_BAD_REQUEST)
   
@@ -181,7 +181,7 @@ def get_cart(request, user_id):
         cart_dict[key]['cart_quantity'] = value
       return Response({"cart" : cart_dict , "total_price" : cart_obj.total_price}, status=status.HTTP_200_OK)
     else:
-      return Response({'viewCart': False}, status=status.HTTP_400_BAD_REQUEST)
+      return Response({'viewCart': False}, status=status.HTTP_200_OK)
   except:
     return Response({'error': 'Cart is empty'}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -197,9 +197,9 @@ def remove_from_cart(request, user_id, product_id):
         cart_obj.save()
         return Response({'info': 'Product deleted from cart'}, status=status.HTTP_200_OK)
       else:
-        return Response({'error': 'Product not found in cart'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'error': 'Product not found in cart'}, status=status.HTTP_200_OK)
     else:
-      return Response({'error': 'Cart is empty'}, status=status.HTTP_400_BAD_REQUEST)
+      return Response({'error': 'Cart is empty'}, status=status.HTTP_200_OK)
   except:
     return Response({'error': 'Cart is empty'}, status=status.HTTP_400_BAD_REQUEST)
   
@@ -211,7 +211,7 @@ def clear_cart(request, user_id):
       cart_obj.delete()
       return Response({'info': 'Cart cleared successfully'}, status=status.HTTP_200_OK)
     else:
-      return Response({'error': 'Cart is empty'}, status=status.HTTP_400_BAD_REQUEST)
+      return Response({'error': 'Cart is empty'}, status=status.HTTP_200_OK)
   except:
     return Response({'error': 'Cart is empty'}, status=status.HTTP_400_BAD_REQUEST)
   
@@ -238,7 +238,7 @@ def update_cart(request, user_id):
         cart_obj = Cart.objects.get(user=user_id)
         return Response({'info': 'Cart updated successfully', 'total_price': cart_obj.total_price}, status=status.HTTP_200_OK)
     else:
-      return Response({'error': 'Cart is empty'}, status=status.HTTP_400_BAD_REQUEST)
+      return Response({'error': 'Cart is empty'}, status=status.HTTP_200_OK)
   except:
     return Response({'error': 'Cart is empty'}, status=status.HTTP_400_BAD_REQUEST)
 

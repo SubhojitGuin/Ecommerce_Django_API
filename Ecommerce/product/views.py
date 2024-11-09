@@ -53,7 +53,7 @@ def product_detail(request, product_id):
         data['reviews'] = Review.objects.filter(product_id=product_id).count()
         return Response(data)
     else:
-        return Response({'error':'Product not found'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'error':'Product not found'}, status=status.HTTP_200_OK)
   except:
     return Response({'error':'Product not found'}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -79,7 +79,7 @@ def product_update(request):
             serializer.save()
         return Response({'message':'Product Updated'}, status=status.HTTP_200_OK)
     else:
-      return Response( {'error':'Product not found'}, status=status.HTTP_400_BAD_REQUEST)
+      return Response( {'error':'Product not found'}, status=status.HTTP_200_OK)
   except:
     return Response( {'error':'Missing data'}, status=status.HTTP_400_BAD_REQUEST)
   
@@ -92,7 +92,7 @@ def product_delete(request):
       product.delete()
       return Response( {'message':'Product Deleted'})
     else:
-      return Response( {'error':'Product not found'}, status=status.HTTP_400_BAD_REQUEST)
+      return Response( {'error':'Product not found'}, status=status.HTTP_200_OK)
   except:
     return Response( {'error':'Missing data'}, status=status.HTTP_400_BAD_REQUEST)
   
@@ -105,7 +105,7 @@ def product_search(request):
         serializer = ProductSerializer(products, many=True)
         return Response(serializer.data)
     else:
-        return Response( {'error':'Product not found'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response( {'error':'Product not found'}, status=status.HTTP_200_OK)
   except:
     return Response( {'error':'Missing Required Data'}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -118,7 +118,7 @@ def product_category(request):
         serializer = ProductSerializer(products, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     else:
-        return Response( {'error':'Product not found'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response( {'error':'Product not found'}, status=status.HTTP_200_OK)
   except:
     return Response({"error":"Missing Required Data"}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -131,7 +131,7 @@ def product_brand(request):
         serializer = ProductSerializer(products, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     else:
-        return Response( {'error':'Product not found'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response( {'error':'Product not found'}, status=status.HTTP_200_OK)
   except:
     return Response( {'error':'Incorrect Data'}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -144,7 +144,7 @@ def product_price(request):
         serializer = ProductSerializer(products, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     else:
-        return Response( {'error':'Product not found'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response( {'error':'Product not found'}, status=status.HTTP_200_OK)
   except:
     return Response( {'error':'Incorrect Data'}, status=status.HTTP_400_BAD_REQUEST)
   
@@ -156,7 +156,7 @@ def product_rating(request , product_id , rating):
          serializer = ModifiedReviewSerializer(review_objs, many=True)
          return Response(serializer.data)         
       else:
-         return Response({"error" : "No reviews found"}, status=status.HTTP_400_BAD_REQUEST)
+         return Response({"error" : "No reviews found"}, status=status.HTTP_200_OK)
    except:
         return Response({"error" : "Missing Required Data"}, status=status.HTTP_400_BAD_REQUEST)
       
@@ -190,7 +190,7 @@ def get_reviews(request, product_id):
     serializer = ModifiedReviewSerializer(reviews, many=True)
     return Response(serializer.data)
   except:
-    return Response( {'error':'No Reviews found'}, status=status.HTTP_400_BAD_REQUEST)
+    return Response( {'error':'No Reviews found'}, status=status.HTTP_200_OK)
 
 @api_view(['PUT'])
 def update_review(request, user_id, product_id):
@@ -203,7 +203,7 @@ def update_review(request, user_id, product_id):
             serializer.save()
         return Response({'message':'Review Updated'}, status=status.HTTP_200_OK)
     else:
-      return Response( {'error':'Review not found'}, status=status.HTTP_400_BAD_REQUEST)
+      return Response( {'error':'Review not found'}, status=status.HTTP_200_OK)
   except:
     return Response( {'error':'Missing data'}, status=status.HTTP_400_BAD_REQUEST)
   
@@ -215,6 +215,6 @@ def delete_review(request, user_id, product_id):
       review.delete()
       return Response( {'message':'Review Deleted'})
     else:
-      return Response( {'error':'Review not found'}, status=status.HTTP_400_BAD_REQUEST)
+      return Response( {'error':'Review not found'}, status=status.HTTP_200_OK)
   except:
     return Response( {'error':'Missing data'}, status=status.HTTP_400_BAD_REQUEST)

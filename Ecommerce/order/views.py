@@ -36,7 +36,7 @@ def create_order(request, user_id):
 
     return Response({"id" : order.id, "total_price": order.total_price}, status=status.HTTP_200_OK)
   except:
-    return Response({'error':'Cart not found'}, status=status.HTTP_400_BAD_REQUEST)
+    return Response({'error':'Cart not found'}, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
 def get_order(request, order_id):
@@ -45,7 +45,7 @@ def get_order(request, order_id):
     order_serializer = OrderSerializer(order, many=False)
     return Response(order_serializer.data)
   except:
-    return Response({'error':'Order not found'}, status=status.HTTP_400_BAD_REQUEST)
+    return Response({'error':'Order not found'}, status=status.HTTP_200_OK)
   
 @api_view(['GET'])
 def get_all_orders(request, user_id):
@@ -55,5 +55,5 @@ def get_all_orders(request, user_id):
     order_data = order_serializer.data
     return Response(order_data)
   except:
-    return Response({'error':'Order not found'}, status=status.HTTP_400_BAD_REQUEST)
+    return Response({'error':'Order not found'}, status=status.HTTP_200_OK)
   
