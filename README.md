@@ -77,7 +77,7 @@ This is an E-Commerce API built with Django and Django REST framework. It provid
 
 8. **Run the development server:**
     ```sh
-    python manage.py runserver
+    python manage.py runserver 8080
     ```
 
 ## Usage

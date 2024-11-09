@@ -121,7 +121,7 @@ def get_wishlist(request , user_id):
           wish['product']['available'] = 'Out of stock'
       return Response(wishdict, status=status.HTTP_200_OK)
     else:
-      return Response( {'error':'Wishlist is empty'}, status=status.HTTP_400_BAD_REQUEST)
+      return Response( {'error':'Wishlist is empty'}, status=status.HTTP_200_OK)
   except:
     return Response( {'error':'Wishlist is empty'}, status=status.HTTP_400_BAD_REQUEST)
   
