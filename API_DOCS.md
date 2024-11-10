@@ -166,3 +166,5 @@ The Product API is used to manage products in the system. It allows you to creat
         "max_price": 50.00
     }
     ```
+
+10. #### `POST /product/filter_review_by_rating/`

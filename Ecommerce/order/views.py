@@ -23,7 +23,7 @@ def create_order(request, user_id):
       if product.quantity < quantity:
         out_of_stock.append({"id": product.id , "name" : product.name})      
     if out_of_stock:
-        return Response({"out_of_stock" : out_of_stock}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"out_of_stock" : out_of_stock}, status=status.HTTP_200_OK)
 
     order = Order.objects.create(user=cart.user, address=address, total_price=cart.total_price, payment_method=payment_method)
     order.save()
