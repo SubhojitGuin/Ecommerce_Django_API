@@ -96,18 +96,46 @@ def product_delete(request):
   except:
     return Response( {'error':'Missing data'}, status=status.HTTP_400_BAD_REQUEST)
   
+# @api_view(['POST'])
+# def product_search(request):
+#   try:
+#     data = request.data
+#     products = Product.objects.filter(name__icontains=data["name"]).all()
+#     if products:
+#         serializer = ProductSerializer(products, many=True)
+#         return Response(serializer.data)
+#     else:
+#         return Response( {'error':'Product not found'}, status=status.HTTP_200_OK)
+#   except:
+#     return Response( {'error':'Missing Required Data'}, status=status.HTTP_400_BAD_REQUEST)
+
 @api_view(['POST'])
 def product_search(request):
-  try:
-    data = request.data
-    products = Product.objects.filter(name__icontains=data["name"]).all()
-    if products:
-        serializer = ProductSerializer(products, many=True)
-        return Response(serializer.data)
-    else:
+    try:
+      data = request.data
+      products_by_name = Product.objects.filter(name__icontains=data["name"]).all()
+      products_by_category = Product.objects.filter(category__icontains=data["name"]).all()
+      products_by_brand = Product.objects.filter(brand__icontains=data["name"]).all()
+
+      product_union = products_by_name.union(products_by_category, products_by_brand)
+      
+      if "min_price" in data and "max_price" in data:
+          products_by_price = Product.objects.filter(price__range=(data["min_price"], data["max_price"])).all()
+          product_union = product_union.intersection(products_by_price)
+      if "brand" in data:
+          products_by_new_brand = Product.objects.filter(brand__icontains=data["brand"]).all()
+          product_union = product_union.intersection(products_by_new_brand)
+      if "category" in data:
+          products_by_new_category = Product.objects.filter(category__icontains=data["category"]).all()
+          product_union = product_union.intersection(products_by_new_category)
+
+      if product_union:
+        serializer = ProductSerializer(product_union, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+      else:
         return Response( {'error':'Product not found'}, status=status.HTTP_200_OK)
-  except:
-    return Response( {'error':'Missing Required Data'}, status=status.HTTP_400_BAD_REQUEST)
+    except:
+      return Response( {'error':'Missing Required Data'}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])
 def product_category(request):
