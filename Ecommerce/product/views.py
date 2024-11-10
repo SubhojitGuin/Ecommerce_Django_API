@@ -113,11 +113,14 @@ def product_delete(request):
 def product_search(request):
     try:
       data = request.data
-      products_by_name = Product.objects.filter(name__icontains=data["name"]).all()
-      products_by_category = Product.objects.filter(category__icontains=data["name"]).all()
-      products_by_brand = Product.objects.filter(brand__icontains=data["name"]).all()
+      data = {k : v for k , v in data.items() if v}
+      product_union = Product.objects.all()
+      if "name" in data:
+        products_by_name = Product.objects.filter(name__icontains=data["name"]).all()
+        products_by_category = Product.objects.filter(category__icontains=data["name"]).all()
+        products_by_brand = Product.objects.filter(brand__icontains=data["name"]).all()
 
-      product_union = products_by_name.union(products_by_category, products_by_brand)
+        product_union = products_by_name.union(products_by_category, products_by_brand)
       
       if "min_price" in data and "max_price" in data:
           products_by_price = Product.objects.filter(price__range=(data["min_price"], data["max_price"])).all()
