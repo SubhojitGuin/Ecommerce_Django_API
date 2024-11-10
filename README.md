@@ -107,7 +107,7 @@ Access the admin panel at `http://localhost:8000/admin/` using the superuser cre
 ### User API
 ![user api](https://github.com/SubhojitGuin/Ecommerce_Django_API/blob/main/images/user.png?raw=true)
 
-For more details, check the [API documentation](API_DOCS).
+For more details, check the [API documentation](API_DOCS.md).
 
 ## License
 This project is licensed under the MIT License. See the [🎗️LICENSE](LICENSE) file for details.
