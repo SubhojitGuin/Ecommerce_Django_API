@@ -114,4 +114,4 @@ This project is licensed under the MIT License. See the [🎗️LICENSE](LICENSE
 
 ## Contributors
 
-[![langchain contributors](https://contrib.rocks/image?repo=SudeshnaPathak/Ecommerce_Django_API&max=2000)](https://github.com/SudeshnaPathak/Ecommerce_Django_API/graphs/contributors)
+[![Django E-commerce REST API contributors](https://contrib.rocks/image?repo=SudeshnaPathak/Ecommerce_Django_API&max=2000)](https://github.com/SudeshnaPathak/Ecommerce_Django_API/graphs/contributors)
